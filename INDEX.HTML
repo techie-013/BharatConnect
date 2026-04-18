@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEVA-X | Viksit Bharat Communities</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* ==================== RESET & ADVANCED VARIABLES ==================== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --saffron: #FF6F00;
+            --saffron-glow: rgba(255, 111, 0, 0.3);
+            --green: #138808;
+            --green-glow: rgba(19, 136, 8, 0.3);
+            --navy: #0A192F;
+            --navy-light: #172A45;
+            --navy-lighter: #1E3A5F;
+            --white: #FFFFFF;
+            --gray: #8892B0;
+            --gray-light: #A8B2D1;
+            --cyan: #00E5FF;
+            --cyan-glow: rgba(0, 229, 255, 0.2);
+            --purple: #7B61FF;
+            --pink: #FF4081;
+            
+            --glass-bg: rgba(10, 25, 47, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-highlight: rgba(255, 255, 255, 0.03);
+            --card-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            --glow-spread: 0 0 40px rgba(0, 229, 255, 0.1);
+            
+            --transition-smooth: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--navy);
+            color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ==================== ANIMATED BACKGROUND (ADVANCED) ==================== */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            opacity: 0.5;
+        }
+
+        .gradient-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 30%, rgba(255, 111, 0, 0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(0, 229, 255, 0.08) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        /* ==================== CUSTOM SCROLLBAR ==================== */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--navy); }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--saffron), var(--cyan));
+            border-radius: 10px;
+            border: 2px solid var(--navy);
+        }
+
+        /* ==================== CONTAINER & LAYOUT ==================== */
+        .container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 40px;
+            position: relative;
+            z-index: 5;
+        }
+
+        /* ==================== TYPOGRAPHY ==================== */
+        .gradient-text {
+            background: linear-gradient(135deg, var(--saffron) 0%, var(--cyan) 40%, var(--green) 80%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        .section-title {
+            font-size: 3.2rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--gray-light);
+            margin-bottom: 50px;
+            font-weight: 400;
+        }
+
+        /* ==================== GLASS COMPONENTS 2.0 ==================== */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 36px;
+            padding: 35px;
+            transition: var(--transition-smooth);
+            box-shadow: var(--card-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.02) 100%);
+            pointer-events: none;
+        }
+
+        .glass-card:hover {
+            border-color: var(--cyan);
+            box-shadow: var(--glow-spread), var(--card-shadow);
+            transform: translateY(-8px);
+        }
+
+        /* ==================== HEADER ==================== */
+        header {
+            padding: 25px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            background: rgba(5, 12, 22, 0.8);
+            backdrop-filter: blur(25px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .logo i {
+            color: var(--cyan);
+            font-size: 2.4rem;
+            filter: drop-shadow(0 0 15px var(--cyan-glow));
+            animation: soft-pulse 3s infinite;
+        }
+
+        .logo span { color: var(--saffron); }
+
+        .team-pill {
+            background: rgba(255, 111, 0, 0.1);
+            padding: 12px 28px;
+            border-radius: 100px;
+            border: 1px solid rgba(255, 111, 0, 0.3);
+            font-weight: 600;
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .team-pill i { margin-right: 10px; color: var(--saffron); }
+
+        /* ==================== HERO SECTION ==================== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 160px 0 100px;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero h1 {
+            font-size: 5.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 30px;
+            letter-spacing: -0.03em;
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            color: var(--gray-light);
+            margin-bottom: 40px;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 60px;
+            margin: 50px 0;
+        }
+
+        .stat-item h3 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            color: var(--cyan);
+            line-height: 1;
+        }
+
+        .stat-item p {
+            font-size: 1rem;
+            margin: 5px 0 0;
+            color: var(--gray);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 18px 40px;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--saffron), #FFA040);
+            color: white;
+            box-shadow: 0 10px 30px var(--saffron-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 40px var(--saffron-glow);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--cyan);
+            color: var(--cyan);
+            box-shadow: 0 0 15px var(--cyan-glow);
+        }
+
+        .btn-outline:hover {
+            background: var(--cyan);
+            color: var(--navy);
+            box-shadow: 0 0 30px var(--cyan);
+        }
+
+        /* ==================== COMMUNITY HUBS (ADVANCED CARDS) ==================== */
+        .hubs-section {
+            padding: 80px 0;
+        }
+
+        .hub-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .hub-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 40px;
+            padding: 35px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .hub-card:hover {
+            transform: translateY(-15px) rotateX(2deg) scale(1.02);
+            border-color: var(--saffron);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 30px var(--saffron-glow);
+        }
+
+        .hub-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 25px;
+            transition: var(--transition-smooth);
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--glass-border);
+        }
+
+        .hub-card:hover .hub-icon {
+            transform: scale(1.1) rotate(5deg);
+            background: var(--saffron);
+            color: white;
+            border-color: var(--saffron);
+        }
+
+        .hub-stats {
+            display: flex;
+            gap: 25px;
+            margin: 20px 0;
+            font-size: 1rem;
+        }
+
+        .online-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--green);
+            font-weight: 500;
+        }
+
+        .online-dot {
+            width: 12px;
+            height: 12px;
+            background: var(--green);
+            border-radius: 50%;
+            animation: pulse-green 1.5s infinite;
+            box-shadow: 0 0 15px var(--green-glow);
+        }
+
+        .member-avatars {
+            display: flex;
+            margin: 25px 0 15px;
+        }
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, var(--navy-lighter), var(--navy-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            border: 3px solid var(--navy);
+            margin-left: -12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .avatar:first-child { margin-left: 0; }
+
+        .trending-tag {
+            background: rgba(0, 229, 255, 0.1);
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            color: var(--cyan);
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        /* ==================== DETAILED DASHBOARD ==================== */
+        .dashboard-section {
+            padding: 60px 0;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        .impact-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .metric-card {
+            background: rgba(255,255,255,0.02);
+            border-radius: 24px;
+            padding: 25px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .metric-value {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--saffron);
+        }
+
+        .leaderboard {
+            margin-top: 30px;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .leaderboard-rank {
+            width: 30px;
+            font-weight: 700;
+            color: var(--cyan);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--navy-light);
+            border-radius: 10px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--saffron), var(--cyan));
+            border-radius: 10px;
+            width: 75%;
+            animation: fillProgress 1.5s ease-out;
+        }
+
+        /* ==================== TASK MARKETPLACE (ADVANCED) ==================== */
+        .marketplace-section {
+            padding: 80px 0;
+        }
+
+        .task-filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .filter-chip {
+            padding: 12px 24px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            font-weight: 500;
+        }
+
+        .filter-chip.active {
+            background: var(--saffron);
+            border-color: var(--saffron);
+            color: white;
+            box-shadow: 0 0 20px var(--saffron-glow);
+        }
+
+        .filter-chip:hover {
+            border-color: var(--cyan);
+        }
+
+        .task-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .task-card-detailed {
+            background: var(--glass-bg);
+            border-radius: 28px;
+            padding: 25px;
+            border: 1px solid var(--glass-border);
+            transition: var(--transition-smooth);
+        }
+
+        .task-card-detailed:hover {
+            border-color: var(--cyan);
+            transform: scale(1.02);
+            box-shadow: var(--glow-spread);
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .task-theme {
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: rgba(255,111,0,0.1);
+            color: var(--saffron);
+        }
+
+        .task-price {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--green);
+            margin: 20px 0;
+        }
+
+        .bid-btn {
+            width: 100%;
+            padding: 14px;
+            background: transparent;
+            border: 2px solid var(--cyan);
+            color: var(--cyan);
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            margin-top: 15px;
+        }
+
+        .bid-btn:hover {
+            background: var(--cyan);
+            color: var(--navy);
+            box-shadow: 0 0 20px var(--cyan);
+        }
+
+        /* ==================== LIVE CHAT (ENHANCED) ==================== */
+        .chat-section {
+            padding: 60px 0;
+        }
+
+        .chat-container {
+            background: var(--glass-bg);
+            border-radius: 40px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--card-shadow);
+        }
+
+        .chat-header {
+            padding: 25px 30px;
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: rgba(0,0,0,0.1);
+        }
+
+        .chat-messages {
+            padding: 30px;
+            height: 450px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .message {
+            display: flex;
+            gap: 15px;
+            max-width: 75%;
+            animation: messageSlide 0.4s ease;
+        }
+
+        .message.incoming { align-self: flex-start; }
+        .message.outgoing {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, var(--navy-lighter), var(--navy-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .message-bubble {
+            padding: 18px 22px;
+            border-radius: 28px;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .incoming .message-bubble {
+            background: var(--navy-light);
+            border-bottom-left-radius: 8px;
+        }
+
+        .outgoing .message-bubble {
+            background: linear-gradient(145deg, var(--saffron), #FF9800);
+            border-bottom-right-radius: 8px;
+        }
+
+        .message-time {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            margin-top: 8px;
+        }
+
+        .chat-input-area {
+            padding: 25px 30px;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            gap: 15px;
+            background: rgba(0,0,0,0.1);
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 18px 24px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 60px;
+            color: white;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: var(--transition-smooth);
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--cyan);
+            box-shadow: 0 0 20px var(--cyan-glow);
+        }
+
+        .send-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--cyan);
+            border: none;
+            color: var(--navy);
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .send-btn:hover {
+            background: var(--saffron);
+            color: white;
+            transform: scale(1.1) rotate(10deg);
+        }
+
+        /* ==================== ANIMATIONS ==================== */
+        @keyframes soft-pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+        }
+
+        @keyframes pulse-green {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(1.3); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes messageSlide {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fillProgress {
+            from { width: 0; }
+            to { width: 75%; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .floating { animation: float 6s ease-in-out infinite; }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 1200px) {
+            .hub-grid { grid-template-columns: repeat(2, 1fr); }
+            .task-grid { grid-template-columns: repeat(2, 1fr); }
+            .hero-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 4rem; }
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 0 20px; }
+            .hub-grid { grid-template-columns: 1fr; }
+            .task-grid { grid-template-columns: 1fr; }
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .section-title { font-size: 2.5rem; }
+            .hero h1 { font-size: 3rem; }
+            .hero-stats { flex-wrap: wrap; gap: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- BACKGROUND CANVAS & OVERLAY -->
+<canvas id="bg-canvas"></canvas>
+<div class="gradient-overlay"></div>
+
+<!-- HEADER -->
+<header>
+    <div class="container">
+        <nav>
+            <div class="logo">
+                <i class="fas fa-hand-holding-heart"></i>
+                SEVA<span>X</span>
+            </div>
+            <div class="team-pill">
+                <i class="fas fa-users"></i> Setu Core • Anjali, Sneha, Muskan, Krish
+            </div>
+        </nav>
+    </div>
+</header>
+
+<!-- HERO SECTION -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-grid">
+            <div>
+                <h1>
+                    Communities of <span class="gradient-text">Trust.</span><br>
+                    Connected by <span class="gradient-text">Purpose.</span>
+                </h1>
+                <p>SEVA-X unites six pillars of Viksit Bharat into living, breathing micro-economies where help is instant, culture earns, and no one is left behind.</p>
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="document.getElementById('hubs').scrollIntoView({behavior:'smooth'})">
+                        <i class="fas fa-users"></i> Explore Communities
+                    </button>
+                    <button class="btn btn-outline" onclick="document.getElementById('marketplace').scrollIntoView({behavior:'smooth'})">
+                        <i class="fas fa-tasks"></i> View Tasks
+                    </button>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <h3>6</h3>
+                        <p>Active Hubs</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>3.2k</h3>
+                        <p>Community Members</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>₹2.4L</h3>
+                        <p>Earned This Month</p>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-card floating" style="padding: 25px;">
+                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                    <div style="width: 14px; height: 14px; background: #FF5F56; border-radius: 50%;"></div>
+                    <div style="width: 14px; height: 14px; background: #FFBD2E; border-radius: 50%;"></div>
+                    <div style="width: 14px; height: 14px; background: #27C93F; border-radius: 50%;"></div>
+                </div>
+                <div id="livePreview" style="min-height: 250px;">
+                    <!-- Live preview content -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- INNOVATIVE COMMUNITY HUBS -->
+<section id="hubs" class="hubs-section">
+    <div class="container">
+        <h2 class="section-title">🇮🇳 <span class="gradient-text">Six Communities.</span> One Mission.</h2>
+        <p class="section-subtitle">Each hub is a self-sustaining micro-economy. Click to explore live activity and join the conversation.</p>
+        
+        <div class="hub-grid">
+            <!-- HERITAGE -->
+            <div class="hub-card" onclick="switchCommunity('Heritage')">
+                <div class="hub-icon"><i class="fas fa-landmark"></i></div>
+                <h3>🏛️ Heritage Circle</h3>
+                <p>Artisans • Storytellers • Culture Keepers</p>
+                <div class="hub-stats">
+                    <span><i class="fas fa-user"></i> 428 members</span>
+                    <span><i class="fas fa-tasks"></i> 34 active</span>
+                </div>
+                <div class="online-badge"><span class="online-dot"></span> 15 artisans online</div>
+                <div class="member-avatars">
+                    <div class="avatar">R</div><div class="avatar">S</div><div class="avatar">M</div><div class="avatar">P</div><div class="avatar">+15</div>
+                </div>
+                <div class="trending-tag"><i class="fas fa-fire"></i> Trending: Pottery Workshop</div>
+            </div>
+            <!-- EDUCATION -->
+            <div class="hub-card" onclick="switchCommunity('Education')">
+                <div class="hub-icon"><i class="fas fa-graduation-cap"></i></div>
+                <h3>🎓 Education Squad</h3>
+                <p>Tutors • Note-Sharers • Mentors</p>
+                <div class="hub-stats">
+                    <span><i class="fas fa-user"></i> 1.5k members</span>
+                    <span><i class="fas fa-tasks"></i> 72 active</span>
+                </div>
+                <div class="online-badge"><span class="online-dot"></span> 43 students online</div>
+                <div class="member-avatars">
+                    <div class="avatar">A</div><div class="avatar">K</div><div class="avatar">S</div><div class="avatar">N</div><div class="avatar">+43</div>
+                </div>
+                <div class="trending-tag"><i class="fas fa-fire"></i> Trending: DBMS Crash Course</div>
+            </div>
+            <!-- ADMINISTRATION -->
+            <div class="hub-card" onclick="switchCommunity('Admin')">
+                <div class="hub-icon"><i class="fas fa-building"></i></div>
+                <h3>🏢 Admin Connect</h3>
+                <p>Runners • Document Handlers • Fixers</p>
+                <div class="hub-stats">
+                    <span><i class="fas fa-user"></i> 192 members</span>
+                    <span><i class="fas fa-tasks"></i> 28 active</span>
+                </div>
+                <div class="online-badge"><span class="online-dot"></span> 12 runners online</div>
+                <div class="member-avatars">
+                    <div class="avatar">V</div><div class="avatar">N</div><div class="avatar">S</div><div class="avatar">R</div><div class="avatar">+12</div>
+                </div>
+                <div class="trending-tag"><i class="fas fa-fire"></i> Trending: Form Submission</div>
+            </div>
+            <!-- CYBERSECURITY -->
+            <div class="hub-card" onclick="switchCommunity('Cyber')">
+                <div class="hub-icon"><i class="fas fa-shield-alt"></i></div>
+                <h3>🔐 Cyber Shield</h3>
+                <p>Verifiers • Security Experts • Trust Builders</p>
+                <div class="hub-stats">
+                    <span><i class="fas fa-user"></i> 112 members</span>
+                    <span><i class="fas fa-tasks"></i> 15 active</span>
+                </div>
+                <div class="online-badge"><span class="online-dot"></span> 8 verifiers online</div>
+                <div class="member-avatars">
+                    <div class="avatar">C</div><div class="avatar">D</div><div class="avatar">E</div><div class="avatar">F</div><div class="avatar">+8</div>
+                </div>
+                <div class="trending-tag"><i class="fas fa-check-circle"></i> Trust Score: 98.7%</div>
+            </div>
+            <!-- AGRICULTURE -->
+            <div class="hub-card" onclick="switchCommunity('Agri')">
+                <div class="hub-icon"><i class="fas fa-tractor"></i></div>
+                <h3>🌾 Agri Network</h3>
+                <p>Farmers • Laborers • Agri-Experts</p>
+                <div class="hub-stats">
+                    <span><i class="fas fa-user"></i> 287 members</span>
+                    <span><i class="fas fa-tasks"></i> 22 active</span>
+                </div>
+                <div class="online-badge"><span class="online-dot"></span> 18 farmers online</div>
+                <div class="member-avatars">
+                    <div class="avatar">F</div><div class="avatar">L</div><div class="avatar">W</div><div class="avatar">H</div><div class="avatar">+18</div>
+                </div>
+                <div class="trending-tag"><i class="fas fa-fire"></i> Trending: Harvest Labor</div>
+            </div>
+            <!-- HEALTHCARE -->
+            <div class="hub-card" onclick="switchCommunity('Health')">
+                <div class="hub-icon"><i class="fas fa-hospital"></i></div>
+                <h3>🏥 Health Circle</h3>
+                <p>Caregivers • Medicine Runners • Support</p>
+                <div class="hub-stats">
+                    <span><i class="fas fa-user"></i> 398 members</span>
+                    <span><i class="fas fa-tasks"></i> 41 active</span>
+                </div>
+                <div class="online-badge"><span class="online-dot"></span> 24 helpers online</div>
+                <div class="member-avatars">
+                    <div class="avatar">H</div><div class="avatar">M</div><div class="avatar">N</div><div class="avatar">P</div><div class="avatar">+24</div>
+                </div>
+                <div class="trending-tag"><i class="fas fa-fire"></i> Trending: Medicine Pickup</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- DETAILED IMPACT DASHBOARD -->
+<section class="dashboard-section">
+    <div class="container">
+        <div class="dashboard-grid">
+            <div class="glass-card">
+                <h3 style="margin-bottom: 25px;"><i class="fas fa-chart-line" style="color: var(--cyan);"></i> Viksit Bharat Impact Tracker</h3>
+                <div class="impact-metrics">
+                    <div class="metric-card">
+                        <i class="fas fa-indian-rupee-sign" style="font-size: 2rem; color: var(--green);"></i>
+                        <div class="metric-value">₹2.4L</div>
+                        <p>Community Earnings (MTD)</p>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 68%;"></div></div>
+                        <small>68% of monthly target</small>
+                    </div>
+                    <div class="metric-card">
+                        <i class="fas fa-users" style="font-size: 2rem; color: var(--cyan);"></i>
+                        <div class="metric-value">3.2k</div>
+                        <p>Active Citizens</p>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 82%;"></div></div>
+                        <small>Across 6 hubs</small>
+                    </div>
+                    <div class="metric-card">
+                        <i class="fas fa-clock" style="font-size: 2rem; color: var(--saffron);"></i>
+                        <div class="metric-value">4.2m</div>
+                        <p>Avg Response Time</p>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 94%;"></div></div>
+                        <small>Faster than industry avg</small>
+                    </div>
+                    <div class="metric-card">
+                        <i class="fas fa-tree" style="font-size: 2rem; color: var(--green);"></i>
+                        <div class="metric-value">1.2k</div>
+                        <p>Heritage Tasks</p>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 45%;"></div></div>
+                        <small>Culture preserved</small>
+                    </div>
+                </div>
+                
+                <div class="leaderboard">
+                    <h4 style="margin: 30px 0 20px;"><i class="fas fa-trophy" style="color: #FFD700;"></i> Top Contributors</h4>
+                    <div class="leaderboard-item">
+                        <span class="leaderboard-rank">1</span>
+                        <div class="avatar" style="width: 40px; height: 40px;">R</div>
+                        <div style="flex:1;">Rajesh Kumar <span style="color: var(--gray);">(Heritage)</span></div>
+                        <span style="color: var(--green);">₹8,450 earned</span>
+                    </div>
+                    <div class="leaderboard-item">
+                        <span class="leaderboard-rank">2</span>
+                        <div class="avatar" style="width: 40px; height: 40px;">A</div>
+                        <div style="flex:1;">Anjali Sharma <span style="color: var(--gray);">(Education)</span></div>
+                        <span style="color: var(--green);">₹6,200 earned</span>
+                    </div>
+                    <div class="leaderboard-item">
+                        <span class="leaderboard-rank">3</span>
+                        <div class="avatar" style="width: 40px; height: 40px;">G</div>
+                        <div style="flex:1;">Gurpreet Singh <span style="color: var(--gray);">(Agri)</span></div>
+                        <span style="color: var(--green);">₹5,850 earned</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="glass-card">
+                <h3 style="margin-bottom: 25px;"><i class="fas fa-map-marked-alt" style="color: var(--saffron);"></i> Scaling Roadmap</h3>
+                <div style="position: relative; height: 200px; margin-bottom: 30px;">
+                    <div style="position: absolute; left: 0; top: 20px;">
+                        <div style="display: flex; align-items: center; gap: 10px;"><div class="online-dot"></div> Phase 1: GJUS&T (Live)</div>
+                    </div>
+                    <div style="position: absolute; left: 30%; top: 80px;">
+                        <div style="display: flex; align-items: center; gap: 10px;"><div class="online-dot" style="background: var(--cyan); animation: none;"></div> Phase 2: Haryana Universities</div>
+                    </div>
+                    <div style="position: absolute; left: 60%; top: 40px;">
+                        <div style="display: flex; align-items: center; gap: 10px;"><div class="online-dot" style="background: var(--gray); animation: none;"></div> Phase 3: Delhi NCR</div>
+                    </div>
+                    <div style="position: absolute; left: 80%; top: 140px;">
+                        <div style="display: flex; align-items: center; gap: 10px;"><div class="online-dot" style="background: var(--gray); animation: none;"></div> Phase 4: Pan India</div>
+                    </div>
+                    <svg style="position: absolute; top:0; left:0; width:100%; height:100%; pointer-events: none;">
+                        <path d="M 10 40 Q 150 100 250 90 T 500 60 T 650 150" stroke="var(--cyan)" fill="none" stroke-width="2" stroke-dasharray="5,5" opacity="0.5"/>
+                    </svg>
+                </div>
+                <h4>Recent Activity Feed</h4>
+                <div id="activityFeedCompact" style="max-height: 200px; overflow-y: auto;">
+                    <!-- Dynamic activity -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- TASK MARKETPLACE (ADVANCED) -->
+<section id="marketplace" class="marketplace-section">
+    <div class="container">
+        <h2 class="section-title">⚡ <span class="gradient-text">Live Task Marketplace</span></h2>
+        <div class="task-filters">
+            <span class="filter-chip active" onclick="filterTasks('All')">All Tasks</span>
+            <span class="filter-chip" onclick="filterTasks('Heritage')">🏛️ Heritage</span>
+            <span class="filter-chip" onclick="filterTasks('Education')">🎓 Education</span>
+            <span class="filter-chip" onclick="filterTasks('Admin')">🏢 Admin</span>
+            <span class="filter-chip" onclick="filterTasks('Agri')">🌾 Agri</span>
+            <span class="filter-chip" onclick="filterTasks('Health')">🏥 Health</span>
+        </div>
+        <div class="task-grid" id="taskGrid">
+            <!-- Populated by JavaScript -->
+        </div>
+    </div>
+</section>
+
+<!-- ENHANCED LIVE CHAT -->
+<section id="chat" class="chat-section">
+    <div class="container">
+        <div class="chat-container">
+            <div class="chat-header">
+                <div class="hub-icon" style="width: 60px; height: 60px; margin:0; background: var(--saffron);"><i class="fas fa-comments"></i></div>
+                <div>
+                    <h2><span id="currentRoom">Heritage Circle</span> Chat</h2>
+                    <p style="color: var(--gray);"><span id="onlineCount">15</span> members online • <span id="typingIndicator"></span></p>
+                </div>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <!-- Populated by JS -->
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chatInput" class="chat-input" placeholder="Type your message...">
+                <button class="send-btn" onclick="sendChatMessage()"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="padding: 50px 0; text-align: center; border-top: 1px solid var(--glass-border); margin-top: 60px;">
+    <div class="container">
+        <div class="logo" style="justify-content: center; margin-bottom: 20px;">
+            <i class="fas fa-bolt"></i> SEVA<span>X</span>
+        </div>
+        <p>© 2026 SEVA-X • Setu Core • Built for TechTarang Hackathon</p>
+        <p style="margin: 15px 0; color: var(--gray);">Anjali • Sneha • Muskan • Krish | Viksit Bharat @2047</p>
+        <p style="font-size: 0.9rem;">"Connecting India, One Task at a Time." 🇮🇳</p>
+    </div>
+</footer>
+
+<script>
+    // ==================== ADVANCED BACKGROUND PARTICLES ====================
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height, particles = [];
+
+    function initBg() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+        particles = [];
+        for (let i = 0; i < 80; i++) {
+            particles.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                radius: Math.random() * 3 + 1,
+                speedX: (Math.random() - 0.5) * 0.2,
+                speedY: (Math.random() - 0.5) * 0.2,
+                color: i % 3 === 0 ? 'rgba(255, 111, 0, 0.15)' : (i % 3 === 1 ? 'rgba(0, 229, 255, 0.1)' : 'rgba(19, 136, 8, 0.1)')
+            });
+        }
+    }
+
+    function drawBg() {
+        ctx.clearRect(0, 0, width, height);
+        particles.forEach(p => {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            ctx.fillStyle = p.color;
+            ctx.fill();
+            p.x += p.speedX;
+            p.y += p.speedY;
+            if (p.x < 0 || p.x > width) p.speedX *= -1;
+            if (p.y < 0 || p.y > height) p.speedY *= -1;
+            
+            // Connect nearby particles
+            particles.forEach(p2 => {
+                const dx = p.x - p2.x;
+                const dy = p.y - p2.y;
+                const dist = Math.sqrt(dx*dx + dy*dy);
+                if (dist < 120) {
+                    ctx.beginPath();
+                    ctx.strokeStyle = `rgba(0, 229, 255, ${0.05 * (1 - dist/120)})`;
+                    ctx.lineWidth = 0.5;
+                    ctx.moveTo(p.x, p.y);
+                    ctx.lineTo(p2.x, p2.y);
+                    ctx.stroke();
+                }
+            });
+        });
+        requestAnimationFrame(drawBg);
+    }
+
+    window.addEventListener('resize', initBg);
+    initBg(); drawBg();
+
+    // ==================== DATA MODELS ====================
+    const communities = {
+        Heritage: {
+            members: 428, online: 15,
+            messages: [
+                {incoming: true, user: 'Rajesh', text: 'Anyone interested in live pottery? Starting in 30 mins.', time: '10:30 AM'},
+                {incoming: false, user: 'You', text: 'I\'m in! How much?', time: '10:31 AM'},
+                {incoming: true, user: 'Rajesh', text: '₹150 per person. I can take 5 people.', time: '10:32 AM'},
+                {incoming: true, user: 'Meera', text: 'I also do Madhubani workshops if anyone interested!', time: '10:35 AM'}
+            ]
+        },
+        Education: {
+            members: 1542, online: 43,
+            messages: [
+                {incoming: true, user: 'Anjali', text: 'DBMS exam tomorrow! Anyone has crash notes?', time: '9:15 AM'},
+                {incoming: false, user: 'You', text: 'I have summarized notes. ₹50.', time: '9:16 AM'},
+                {incoming: true, user: 'Krish', text: 'Can you share with me too?', time: '9:18 AM'}
+            ]
+        },
+        Admin: {
+            members: 192, online: 12,
+            messages: [
+                {incoming: true, user: 'Vikram', text: 'Can someone submit my form to Block A office?', time: '11:00 AM'},
+                {incoming: false, user: 'You', text: 'I\'m going there in 15 mins. ₹30.', time: '11:01 AM'}
+            ]
+        },
+        Cyber: {
+            members: 112, online: 8,
+            messages: [
+                {incoming: true, user: 'CyberBot', text: 'System trust score updated: 98.7%', time: '08:00 AM'},
+                {incoming: true, user: 'SecurityTeam', text: 'New verification layer deployed.', time: '09:30 AM'}
+            ]
+        },
+        Agri: {
+            members: 287, online: 18,
+            messages: [
+                {incoming: true, user: 'Gurpreet', text: 'Need 4 laborers for wheat harvest tomorrow.', time: '7:30 AM'},
+                {incoming: false, user: 'You', text: 'I have a team of 3. Can join by 8 AM.', time: '7:35 AM'}
+            ]
+        },
+        Health: {
+            members: 398, online: 24,
+            messages: [
+                {incoming: true, user: 'Priya', text: 'Can someone get Crocin from pharmacy? Urgent.', time: '2:00 AM'},
+                {incoming: false, user: 'You', text: 'I\'m near 24/7 store. ₹120.', time: '2:02 AM'}
+            ]
+        }
+    };
+
+    const allTasks = [
+        {theme: 'Heritage', title: 'Live Pottery Demo - 30 mins', price: 150, location: 'Art Block', time: 'In 20 mins'},
+        {theme: 'Heritage', title: 'Madhubani Painting Workshop', price: 200, location: 'Cultural Hall', time: '2 PM'},
+        {theme: 'Education', title: 'Bring ID card from Hostel 3', price: 50, location: 'Exam Gate', time: 'Urgent'},
+        {theme: 'Education', title: 'DBMS Crash Course - 1 hour', price: 100, location: 'Library', time: '8 PM'},
+        {theme: 'Admin', title: 'Submit form to Block A', price: 80, location: 'Admin Office', time: 'Before 4 PM'},
+        {theme: 'Admin', title: 'Collect certificate from office', price: 60, location: 'Block B', time: 'Today'},
+        {theme: 'Agri', title: 'Need 4 laborers for harvest', price: 800, location: 'Farm Sector 15', time: 'Tomorrow 7 AM'},
+        {theme: 'Agri', title: 'Tractor driver needed', price: 500, location: 'Village Road', time: 'Today evening'},
+        {theme: 'Health', title: 'Pick Crocin from pharmacy', price: 120, location: '24/7 Medical', time: 'Urgent'},
+        {theme: 'Health', title: 'Accompany to hospital OPD', price: 200, location: 'City Hospital', time: '10 AM tomorrow'}
+    ];
+
+    let currentCommunity = 'Heritage';
+
+    // ==================== RENDER FUNCTIONS ====================
+    function renderTasks(filter = 'All') {
+        const grid = document.getElementById('taskGrid');
+        const filtered = filter === 'All' ? allTasks : allTasks.filter(t => t.theme === filter);
+        grid.innerHTML = filtered.map(t => `
+            <div class="task-card-detailed">
+                <div class="task-header">
+                    <span class="task-theme">${getThemeIcon(t.theme)} ${t.theme}</span>
+                    <span style="color: var(--gray);"><i class="far fa-clock"></i> ${t.time}</span>
+                </div>
+                <h4>${t.title}</h4>
+                <p style="color: var(--gray); margin: 10px 0;"><i class="fas fa-map-pin"></i> ${t.location}</p>
+                <div class="task-price">₹${t.price}</div>
+                <button class="bid-btn" onclick="acceptTask('${t.title}', ${t.price})">Accept Task</button>
+            </div>
+        `).join('');
+    }
+
+    function renderChat(community) {
+        const container = document.getElementById('chatMessages');
+        const data = communities[community] || communities.Heritage;
+        container.innerHTML = data.messages.map(m => `
+            <div class="message ${m.incoming ? 'incoming' : 'outgoing'}">
+                <div class="message-avatar">${m.user.charAt(0)}</div>
+                <div class="message-bubble">
+                    <strong style="font-size: 0.9rem;">${m.user}</strong>
+                    <div>${m.text}</div>
+                    <div class="message-time">${m.time}</div>
+                </div>
+            </div>
+        `).join('');
+        document.getElementById('currentRoom').innerText = community + ' Circle';
+        document.getElementById('onlineCount').innerText = data.online;
+    }
+
+    function renderActivityFeed() {
+        const feed = document.getElementById('activityFeedCompact');
+        const activities = [
+            '🏛️ Rajesh started a pottery workshop', '🎓 Anjali shared DBMS notes', 
+            '🏢 Vikram submitted 3 forms', '🌾 Gurpreet hired 4 laborers',
+            '🏥 Priya delivered medicine', '🔐 Trust score updated to 98.7%'
+        ];
+        feed.innerHTML = activities.map(a => `
+            <div style="padding: 12px 0; border-bottom: 1px solid var(--glass-border);">
+                <i class="fas fa-circle" style="font-size: 0.5rem; color: var(--cyan); margin-right: 10px;"></i> ${a} <span style="color: var(--gray); float: right;">Just now</span>
+            </div>
+        `).join('');
+    }
+
+    function getThemeIcon(theme) {
+        const icons = {'Heritage':'🏛️','Education':'🎓','Admin':'🏢','Cyber':'🔐','Agri':'🌾','Health':'🏥'};
+        return icons[theme] || '📌';
+    }
+
+    function showNotification(msg) {
+        const toast = document.createElement('div');
+        toast.style.cssText = 'position:fixed;bottom:30px;right:30px;background:var(--green);color:white;padding:16px 28px;border-radius:60px;font-weight:600;z-index:9999;animation:messageSlide 0.3s;';
+        toast.innerHTML = `<i class="fas fa-check-circle"></i> ${msg}`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    // ==================== INTERACTIVE FUNCTIONS ====================
+    window.switchCommunity = function(community) {
+        currentCommunity = community;
+        renderChat(community);
+        showNotification(`Switched to ${community} Community`);
+        
+        document.querySelectorAll('.hub-card').forEach(c => c.style.borderColor = 'var(--glass-border)');
+        event.currentTarget.style.borderColor = 'var(--cyan)';
+        
+        document.getElementById('chat').scrollIntoView({behavior: 'smooth'});
+    };
+
+    window.filterTasks = function(filter) {
+        renderTasks(filter);
+        document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+        event.target.classList.add('active');
+    };
+
+    window.acceptTask = function(title, price) {
+        showNotification(`✅ Task Accepted: "${title}". You earned ₹${Math.round(price * 0.1)} commission!`);
+        
+        // Add to activity feed
+        const feed = document.getElementById('activityFeedCompact');
+        const newItem = document.createElement('div');
+        newItem.style.cssText = 'padding:12px 0;border-bottom:1px solid var(--glass-border);animation:messageSlide 0.4s;';
+        newItem.innerHTML = `<i class="fas fa-circle" style="font-size:0.5rem;color:var(--green);margin-right:10px;"></i> You accepted: ${title} <span style="color:var(--gray);float:right;">Just now</span>`;
+        feed.insertBefore(newItem, feed.firstChild);
+    };
+
+    window.sendChatMessage = function() {
+        const input = document.getElementById('chatInput');
+        const text = input.value.trim();
+        if (!text) return;
+        
+        const container = document.getElementById('chatMessages');
+        const msgDiv = document.createElement('div');
+        msgDiv.className = 'message outgoing';
+        msgDiv.innerHTML = `
+            <div class="message-avatar">Y</div>
+            <div class="message-bubble">
+                <strong>You</strong>
+                <div>${text}</div>
+                <div class="message-time">Just now</div>
+            </div>
+        `;
+        container.appendChild(msgDiv);
+        container.scrollTop = container.scrollHeight;
+        input.value = '';
+        
+        // Simulate typing indicator
+        document.getElementById('typingIndicator').innerHTML = '<i class="fas fa-ellipsis-h"></i> Someone is typing...';
+        setTimeout(() => {
+            document.getElementById('typingIndicator').innerHTML = '';
+            const replyDiv = document.createElement('div');
+            replyDiv.className = 'message incoming';
+            replyDiv.innerHTML = `
+                <div class="message-avatar">C</div>
+                <div class="message-bubble">
+                    <strong>Community Member</strong>
+                    <div>Thanks for your message! We'll respond shortly.</div>
+                    <div class="message-time">Just now</div>
+                </div>
+            `;
+            container.appendChild(replyDiv);
+            container.scrollTop = container.scrollHeight;
+        }, 2000);
+    };
+
+    // Enter key for chat
+    document.getElementById('chatInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendChatMessage();
+    });
+
+    // Live preview in hero
+    function updateLivePreview() {
+        document.getElementById('livePreview').innerHTML = `
+            <div style="margin-bottom:20px;"><span style="color:var(--cyan);">⚡ LIVE ACTIVITY</span></div>
+            <div class="task-card-detailed" style="padding:20px;margin-bottom:15px;">
+                <span class="task-theme">🏛️ Heritage</span>
+                <h4>Live Pottery Demo</h4>
+                <div class="task-price" style="font-size:1.8rem;">₹150</div>
+                <small><i class="fas fa-user"></i> Rajesh • 5 slots left</small>
+            </div>
+            <div style="display:flex; gap:10px;">
+                <span class="online-dot"></span> 15 artisans active now
+            </div>
+        `;
+    }
+
+    // Initialize everything
+    renderTasks('All');
+    renderChat('Heritage');
+    renderActivityFeed();
+    updateLivePreview();
+</script>
+</body>
+</html>
